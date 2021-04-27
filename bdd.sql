@@ -71,11 +71,11 @@ CREATE TABLE waz_employes
    emp_id INT(10) NOT NULL AUTO_INCREMENT,
    emp_nom VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE(emp_nom,'(^[^ \\W\\d_-])([A-Za-zàáâäçèéêëìíîïñòóôöùúûüwW ]+)([ -]?)[A-Za-zàáâäçèéêëìíîïñòóôöùúûü]+$')),
    emp_prenom VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE(emp_prenom,'(^[^ \\W\\d_-])([A-Za-zàáâäçèéêëìíîïñòóôöùúûüwW ]+)([ -]?)[A-Za-zàáâäçèéêëìíîïñòóôöùúûü]+$')),
-   emp_adresse VARCHAR(50) NOT NULL CHECK (REGAXP_LIKE(emp_adresse,'^[a-zA-Z \\/\\d\\-']{3,}$')),
-   emp_tel VARCHAR(50) NOT NULL ,
-   emp_mail VARCHAR(50) NOT NULL UNIQUE CHECK (REGEXP_LIKE(emp_mail,'([a-z0-9.-])+@([a-z0-9.-]{2,})([.]{1})[a-z]{2,4}$')),
+   emp_adresse VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE(emp_adresse,"^[^ \s][a-zA-Z ,\\d\/\\\*.%&'-]{3,}$")),
+   emp_tel VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE(emp_tel,"^[^ \W]([0-9 \/\-])*$")),
+   emp_mail VARCHAR(50) NOT NULL UNIQUE CHECK (REGEXP_LIKE(emp_mail,'([a-z0-9.-])+@([a-z0-9.-]{2,})([.]{1})[a-z.-]{2,4}$')),
    emp_poste VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE(emp_poste,'^[a-zA-Z ]{3,}$')),
-   emp_mdp VARCHAR(50) NOT NULL CHECK(REGEXP_LIKE(emp_mdp,'^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[+!*$@%_-])([+!*$@%_\\w-]{8,15})$')),
+   emp_mdp VARCHAR(50) NOT NULL CHECK(REGEXP_LIKE(emp_mdp,'^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[+!*$@%_-])([+!*$@%_\\w -]{8,15})$')),
    PRIMARY KEY(emp_id)
 );
 -- Structure de la table waz_utilisateurs
