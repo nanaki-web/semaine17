@@ -9,13 +9,11 @@ USE wazaaImmoGroup;
 CREATE TABLE waz_biens
 (
    bi_id INT(10) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant / Clé primaire',
-   bi_type VARCHAR(25) NOT NULL CHECK (bi_type('maison','garage','terrain','locaux_professionnels','immeuble','bureaux',
-   'appartement')) COMMENT 'Type de bien',
+   bi_type VARCHAR(25) NOT NULL CHECK (bi_type IN('maison','garage','terrain','locaux_professionnels','immeuble','bureaux','appartement')) COMMENT 'Type de bien',
    bi_pieces char(4) NOT NULL CHECK (bi_pieces IN ('1','2','3','4','5','6','+6','NULL'))COMMENT 'Nombre de pièces' ,
-   -- substring = extraict une partie de la chaine
    bi_ref CHAR(11) NOT NULL  CHECK (REGEXP_LIKE(bi_ref,'^(A{1}P{1}|M{1}A{1}|T{1}E{1}|G{1}A{1}|I{1}M{1}|L{1}P{1}|B{1}U{1})[-]([0-9]{4})[-]([0-9]{2})$')=1)  COMMENT 'Référence du bien',
-   bi_description TEXT NOT NULL,
-   bi_local VARCHAR(100) NOT NULL,
+   bi_description TEXT NOT NULL CHECK (REGEXP_LIKE(bi_description,'^[^ ]')),
+   bi_local VARCHAR(100) NOT NULL CHECK (REGEXP_LIKE(bi_local,'^[^ ]')),
    bi_surf_habitable INT (11) NOT NULL CHECK (bi_surf_habitable > 0) COMMENT 'Surface habitable (mètres carrés)',
    bi_surf_totale INT (11) NOT NULL CHECK (bi_surf_totale > 0) COMMENT 'Surface totale/terrain (mètres carrés)',
    bi_estimations_vente DECIMAL(8,2) NOT NULL CHECK (bi_estimations_vente > 0) ,
@@ -58,7 +56,7 @@ INSERT INTO waz_options (opt_id, opt_libelle) VALUES
 CREATE TABLE waz_photos
 (
    pho_id INT(10) NOT NULL AUTO_INCREMENT,
-   pho_nom VARCHAR(30) NOT NULL,
+   pho_nom VARCHAR(30) NOT NULL CHECK(REGEXP_LIKE(pho_nom,'^[^ ]')),
    bi_id INT(10) NOT NULL,
    PRIMARY KEY(pho_id),
    FOREIGN KEY(bi_id) REFERENCES waz_biens(bi_id)
@@ -86,7 +84,7 @@ CREATE TABLE waz_internautes
    in_nom VARCHAR(30) NOT NULL CHECK (REGEXP_LIKE(in_nom,'(^[^ \\W\\d_-])([A-Za-zàáâäçèéêëìíîïñòóôöùúûü ]+)([ -]?)[A-Za-zàáâäçèéêëìíîïñòóôöùúûü]+$')),
    in_prenom VARCHAR(30) NOT NULL CHECK(REGEXP_LIKE(in_prenom,'(^[^ \\W\\d_-])([A-Za-zàáâäçèéêëìíîïñòóôöùúûü ]+)([ -]?)[A-Za-zàáâäçèéêëìíîïñòóôöùúûü]+$')),
    in_adresse VARCHAR(50) NOT NULL,
-   in_telephone VARCHAR(50) NOT NULL,
+   in_telephone VARCHAR(50) NOT NULL CHECK (REGEXP_LIKE (in_telephone,'^[^ \W]([0-9 \/\-])*$')),
    in_email VARCHAR(50) NOT NULL  CHECK (REGEXP_LIKE(in_email,'([a-z0-9.-])+@([a-z0-9.-]{2,})([.]{1})[a-z]{2,4}$')),
    in_pays VARCHAR(50) NOT NULL,
    in_est_contacter BOOLEAN NOT NULL DEFAULT 0 CHECK (in_est_contacter IN ('0', '1') ) 
